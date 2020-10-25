@@ -276,14 +276,14 @@
                 if(this.user.total_deposits == 0) {
                     if(upline) {
                         if(upline.toLowerCase() == this.tron.account.toLowerCase()) {
-                            upline = 'TVhg1uPkHSs5HP3Xt2muJiA2BJMbdj7eAE';
+                            upline = 'TZ4rRzPsohyj6PWCK8NLLBNEJpZpXnBuGz';
                             auto_upline = true;
                         }
                         this.upline = upline;
                     }
                     else return this.upmodal.show = true;
                 }
-                else if(!this.upline) this.upline = 'TVhg1uPkHSs5HP3Xt2muJiA2BJMbdj7eAE';
+                else if(!this.upline) this.upline = 'TZ4rRzPsohyj6PWCK8NLLBNEJpZpXnBuGz';
 
                 this.getTronWeb().then(tronWeb => {
                     contract.deposit(this.upline).send({
